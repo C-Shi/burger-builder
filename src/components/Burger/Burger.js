@@ -21,6 +21,7 @@ const Burger = ( props ) => {
 
 
   return (
+    // display the image of burger based on the ingredient added
     <div className="Burger">
       <BurgerIngredient type="bread-top" />
       {transformedIngredients}
