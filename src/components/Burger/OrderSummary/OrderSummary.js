@@ -1,5 +1,6 @@
 import React from 'react'
 import Aux from '../../../hoc/Aux'
+import Button from '../../UI/Button/Button'
 
 const OrderSummary = ( props ) => {
   // convert ingredients:quantity key-value pair into actual <li> components in order to display in the summary
@@ -17,7 +18,10 @@ const OrderSummary = ( props ) => {
       <ul>
         {ingredientsSummary}
       </ul>
+      <p><strong>Total Price: {props.price}</strong></p>
       <p>Continue to Checkout ?</p>
+      <Button btnType='Danger' clicked={props.purchaseCancel}>CANCEL</Button>
+      <Button btnType='Success' clicked={props.purchaseContinue}>CONTINUE</Button>
     </Aux>
   )
 }
