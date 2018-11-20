@@ -31,3 +31,24 @@
   border-bottom: 4px solid #40a4c8;
   color: #fff;
 }
+
+@media (max-width: 501px) {
+  .Toolbar nav {
+    display: none;
+  }
+
+  .SideDrawer .NavigationItems {
+    display: block;
+  }
+
+  .SideDrawer .NavigationItem a {
+    color: #000;
+  }
+
+  .SideDrawer .NavigationItem a:hover, 
+  .SideDrawer .NavigationItem a:active {
+    background: transparent;
+    cursor: pointer;
+    border-bottom: 4px solid #40a4c8;
+  }
+}
