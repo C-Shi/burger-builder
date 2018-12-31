@@ -7,7 +7,7 @@ const WithErrorHandler = (WrappedComponenet, axios) => {
     state = {
       error: null
     }
-    componentDidMount(){
+    componentWillMount(){
       // interceptors is the listen for axios
       // example : axios.interceptors.response.use will run on every response getting back
       axios.interceptors.request.use(req => {

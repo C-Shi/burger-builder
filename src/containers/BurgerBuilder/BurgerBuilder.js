@@ -24,6 +24,7 @@ class BurgerBuilder extends Component {
       purchasable: false,
       purchasing: false,
       loading: false,
+      error: false
     };
     this.addIngredientHandler =  this.addIngredientHandler.bind(this)
     this.removeIngredientHandler = this.removeIngredientHandler.bind(this)
@@ -34,11 +35,13 @@ class BurgerBuilder extends Component {
 
   componentDidMount(){
     // obtains price data from database
-    axios.get('https://react-my-burger-49afe.firebaseio.com/ingredients.json')
+    axios.get('https://react-my-burger-49afe.firebaseio.com/ingredients')
     .then(response => {
       this.setState({ingredients: response.data})
     })
-    .catch(error => {})
+    .catch(error => {
+      this.setState({error: true})
+    })
   }
 
   updatePurchaseState() {
@@ -130,7 +133,7 @@ class BurgerBuilder extends Component {
     }
 
     let orderSummary = null;
-    let burger = <Spinner />;
+    let burger = this.state.error ? <p style={{textAlign: 'center'}}>Ingredients cannot be loaded</p> : <Spinner />;
 
     // only do all these if successfully fetch ingredients data from db
     if (this.state.ingredients) {
