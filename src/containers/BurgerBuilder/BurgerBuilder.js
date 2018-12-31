@@ -35,7 +35,7 @@ class BurgerBuilder extends Component {
 
   componentDidMount(){
     // obtains price data from database
-    axios.get('https://react-my-burger-49afe.firebaseio.com/ingredients')
+    axios.get('/ingredients.json')
     .then(response => {
       this.setState({ingredients: response.data})
     })
