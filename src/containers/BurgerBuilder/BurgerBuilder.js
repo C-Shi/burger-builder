@@ -19,12 +19,7 @@ class BurgerBuilder extends Component {
   constructor( props ) {
     super( props );
     this.state = {
-      ingredients: {
-        salad: 0,
-        meat: 0,
-        cheese: 0,
-        bacon: 0
-      },
+      ingredients: null,
       totalPrice: 4,
       purchasable: false,
       purchasing: false,
@@ -35,6 +30,15 @@ class BurgerBuilder extends Component {
     this.pucharseHandler = this.pucharseHandler.bind(this)
     this.purchaseCancelHandler = this.purchaseCancelHandler.bind(this)
     this.purchaseContinueHandler = this.purchaseContinueHandler.bind(this)
+  }
+
+  componentDidMount(){
+    // obtains price data from database
+    axios.get('https://react-my-burger-49afe.firebaseio.com/ingredients.json')
+    .then(response => {
+      this.setState({ingredients: response.data})
+    })
+    .catch(error => {})
   }
 
   updatePurchaseState() {
@@ -125,14 +129,33 @@ class BurgerBuilder extends Component {
       disableInfo[key] = disableInfo[key] <= 0
     }
 
-    let orderSummary = <OrderSummary 
+    let orderSummary = null;
+    let burger = <Spinner />;
+
+    // only do all these if successfully fetch ingredients data from db
+    if (this.state.ingredients) {
+      burger = (
+        <Aux>
+          <Burger ingredients={this.state.ingredients}/>
+          <BuildControls 
+            ingredientsAdd={this.addIngredientHandler} 
+            ingredientsRemove={this.removeIngredientHandler}
+            purchasable={this.state.purchasable}
+            disabled={disableInfo}
+            price={this.state.totalPrice}
+            ordered={this.pucharseHandler}/>
+        </Aux>
+      );
+
+      orderSummary = <OrderSummary 
       ingredients={this.state.ingredients}
       purchaseCancel={this.purchaseCancelHandler}
       purchaseContinue={this.purchaseContinueHandler}
       price={this.state.totalPrice}/>
 
-    if (this.state.loading) {
-      orderSummary = <Spinner />
+      if (this.state.loading) {
+        orderSummary = <Spinner />
+      }
     }
 
     return (
@@ -140,18 +163,12 @@ class BurgerBuilder extends Component {
         <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients}/>
-        <BuildControls 
-          ingredientsAdd={this.addIngredientHandler} 
-          ingredientsRemove={this.removeIngredientHandler}
-          purchasable={this.state.purchasable}
-          disabled={disableInfo}
-          price={this.state.totalPrice}
-          ordered={this.pucharseHandler}/>
+        {burger}
       </Aux>
     )
   }
 }
 
+// export will run withErrorHandler and return back a higher order component which contains BurgerBuilder Component
 export default withErrorHandler(BurgerBuilder, axios)
 
