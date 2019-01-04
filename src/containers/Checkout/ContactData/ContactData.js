@@ -73,6 +73,15 @@ class ContactData extends Component {
     })
   }
 
+  inputChangeHandler = (event, inputIdentifier) => {
+    const updatedOrderForm = Object.assign({}, this.state.orderForm);
+    const updatedFormElement = updatedOrderForm[inputIdentifier];
+    // using object.assign to create a copy but not reference of the original object
+    // update formElement value to real value
+    updatedFormElement.value = event.target.value;
+    this.setState({orderForm: updatedOrderForm})
+  }
+
   render(){
     const formElementsArray = [];
 
@@ -90,7 +99,8 @@ class ContactData extends Component {
             key={formElement.id}
             elementType={formElement.config.elementType} 
             elementConfig={formElement.config.elementConfig}
-            value={formElement.config.value} />
+            value={formElement.config.value} 
+            changed={(event) => this.inputChangeHandler(event, formElement.id)}/>
         ))}
         <Button btnType="Success" clicked={this.orderHandler}>Button</Button>
       </form>
