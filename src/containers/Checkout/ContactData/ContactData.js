@@ -57,10 +57,16 @@ class ContactData extends Component {
   orderHandler = (event) => {
     event.preventDefault();
     this.setState({loading: true})
+    // get order form address from state
+    const formData = {};
+    for (let formElementIdentifier in this.state.orderForm) {
+      formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value
+    }
     const order = {
       ingredients: this.props.ingredients,
       // for real production should calculate price on the server to prevent manipulate on client side
       price: this.props.price,
+      orderData: formData
     }
     // for firebase specifically add url/where to store.json
     axios.post('/orders.json', order)
@@ -93,7 +99,7 @@ class ContactData extends Component {
     }
 
     let form = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {formElementsArray.map(formElement => (
           <Input 
             key={formElement.id}
