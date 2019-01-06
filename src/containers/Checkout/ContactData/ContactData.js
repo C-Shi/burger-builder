@@ -89,9 +89,20 @@ class ContactData extends Component {
       price: this.props.price,
       orderData: formData
     }
+
+    // validate form submittion 
+    for (let key in this.state.orderForm){
+      // if any required field is false then do not submit
+      if (!this.state.orderForm[key].valid) {
+        alert(`${key} is invalid`)
+        this.setState({loading: false})
+        return ;
+      }
+    }
+
     // for firebase specifically add url/where to store.json
     axios.post('/orders.json', order)
-    .then(res => {
+    .then(res =>{ 
       this.setState({loading: false })
       this.props.history.push('/')
     })
@@ -120,7 +131,7 @@ class ContactData extends Component {
     // update formElement value to real value
     updatedFormElement.value = event.target.value;
     updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation)
-    console.log(updatedFormElement)
+    console.log(this.state.orderForm.name)
     this.setState({orderForm: updatedOrderForm})
   }
 
@@ -141,6 +152,7 @@ class ContactData extends Component {
             key={formElement.id}
             elementType={formElement.config.elementType} 
             elementConfig={formElement.config.elementConfig}
+            invalid={!formElement.config.valid}
             value={formElement.config.value} 
             changed={(event) => this.inputChangeHandler(event, formElement.id)}/>
         ))}
