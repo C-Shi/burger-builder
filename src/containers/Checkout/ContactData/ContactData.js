@@ -131,7 +131,6 @@ class ContactData extends Component {
     // update formElement value to real value
     updatedFormElement.value = event.target.value;
     updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation)
-    console.log(this.state.orderForm.name)
     this.setState({orderForm: updatedOrderForm})
   }
 
